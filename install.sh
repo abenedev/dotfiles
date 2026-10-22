@@ -69,6 +69,8 @@ minimal_packages=(
     eza  # Blazing fast `ls`
     fzf  # Zoxide auto-completion dependency
     gcc
+    github-cli
+    gnome-keyring
     make
     megacmd
     neofetch
@@ -178,7 +180,6 @@ systemctl start --user ssh-agent.service
 if [ "$INSTALL_APPS" = true ]; then
     echo "Installing desktop applications packages..."
     apps_packages=(
-        antigravity
         blueman
         brave-bin
         discord-canary
