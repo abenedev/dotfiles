@@ -103,9 +103,16 @@ echo "Setting up GPG..."
 mkdir -p ~/.gnupg ~/.local/bin
 chmod 700 ~/.gnupg
 cp home/user/.gnupg/gpg-agent.conf ~/.gnupg
-cp home/user/.local/bin/gpg-unlock.sh ~/.local/bin
+cp home/user/.local/bin/gpg-unlock.sh home/user/.local/bin/ssh-unlock.sh ~/.local/bin
 gpgconf --kill gpg-agent
-echo "Store the GPG key passphrase with: secret-tool store --label='GPG passphrase' service gpg-passphrase"
+echo "Unlocking gnome-keyring on TTY login..."
+grep -q pam_gnome_keyring /etc/pam.d/login || sudo sed -i \
+    -e '/^auth .*system-local-login/a auth       optional     pam_gnome_keyring.so' \
+    -e '/^session .*system-local-login/a session    optional     pam_gnome_keyring.so auto_start' \
+    /etc/pam.d/login
+echo "Store the passphrases (the keyring must use your login password) with:"
+echo "    secret-tool store --label='GPG passphrase' service gpg-passphrase"
+echo "    secret-tool store --label='SSH passphrase' service ssh-passphrase"
 
 echo "Setting up Vim..."
 cp home/user/.vimrc ~
