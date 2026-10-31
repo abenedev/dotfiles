@@ -71,6 +71,7 @@ minimal_packages=(
     gcc
     github-cli
     gnome-keyring
+    libsecret  # secret-tool
     make
     megacmd
     neofetch
@@ -97,6 +98,14 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 cp home/user/.zshrc ~/
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+echo "Setting up GPG..."
+mkdir -p ~/.gnupg ~/.local/bin
+chmod 700 ~/.gnupg
+cp home/user/.gnupg/gpg-agent.conf ~/.gnupg
+cp home/user/.local/bin/gpg-unlock.sh ~/.local/bin
+gpgconf --kill gpg-agent
+echo "Store the GPG key passphrase with: secret-tool store --label='GPG passphrase' service gpg-passphrase"
 
 echo "Setting up Vim..."
 cp home/user/.vimrc ~
