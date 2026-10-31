@@ -131,4 +131,4 @@ eval "$(zoxide init zsh)"
 # Created by `pipx` on 2024-05-15 12:28:17
 export PATH="$PATH:/home/user/.local/bin"
 
-eval $(ssh-agent -s) > /dev/null
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"  # Systemd ssh-agent.service, shared by every shell
