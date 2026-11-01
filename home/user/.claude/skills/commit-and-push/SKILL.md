@@ -132,7 +132,7 @@ If a commit fails a check, **do not push**: say which commit and why, and let th
 
 If the branch has no upstream, push with `git push -u origin <branch>` only when `origin` is the sole remote; otherwise ask which remote to use.
 
-Then push with a plain `git push` (no force flags, no `--no-verify`, don't bypass hooks). The push goes over SSH, so the SSH key's passphrase may be asked in a small window (`~/.local/bin/ssh-askpass.sh`): run it with a long Bash `timeout` (e.g. 300000 ms) and tell the user to expect it. If the push is rejected (non-fast-forward, protected branch, permission), stop and report the error; don't pull, rebase or force without being asked. If the user cancels the passphrase window, report it and stop.
+Then push with a plain `git push` (no force flags, no `--no-verify`, don't bypass hooks), setting the SSH agent and askpass explicitly so it works even when the session started before those variables existed: `SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" SSH_ASKPASS="$HOME/.local/bin/ssh-askpass.sh" SSH_ASKPASS_REQUIRE=prefer git push`. The push goes over SSH, so the SSH key's passphrase may be asked in a small window (`~/.local/bin/ssh-askpass.sh`): run it with a long Bash `timeout` (e.g. 300000 ms) and tell the user to expect it. If the push is rejected (non-fast-forward, protected branch, permission), stop and report the error; don't pull, rebase or force without being asked. If the user cancels the passphrase window, report it and stop.
 
 ## 6. Report
 
