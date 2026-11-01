@@ -2,6 +2,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("waybar")
     hl.exec_cmd("hypridle")
-    hl.exec_cmd("mega-cmd-server")
+    hl.exec_cmd("~/.local/bin/mega-power.sh")  -- runs mega-cmd-server only on AC
     hl.exec_cmd("alacritty -e yay -Syu --needed --noconfirm")
 end)
