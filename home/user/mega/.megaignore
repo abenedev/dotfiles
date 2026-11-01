@@ -7,3 +7,13 @@
 -:*.sb-????????-??????
 -:*.tmp
 -:*/target/debug
+-:__pycache__
+-:*.pyc
+-:node_modules
+-:venv
+-:dist
+-:build
+-:target
+-:*.sqlite-shm
+-:*.sqlite-wal
+-:postgres_data
