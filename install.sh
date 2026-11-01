@@ -76,7 +76,9 @@ minimal_packages=(
     megacmd
     neofetch
     neovim
+    powertop  # Power usage analysis
     ripgrep
+    tlp  # Battery power saving
     tree
     unzip
     vim
@@ -89,6 +91,15 @@ yay -Syu --needed --noconfirm "${minimal_packages[@]}"
 
 echo "Setting up bluetooth..."
 sudo systemctl enable --now bluetooth.service
+
+echo "Setting up power saving..."
+sudo mkdir -p /etc/tlp.d
+sudo cp etc/tlp.d/01-battery.conf /etc/tlp.d
+sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
+sudo systemctl enable --now tlp.service
+sudo tlp start
+# Start these on demand instead of at boot (docker.socket still starts docker when needed)
+sudo systemctl disable docker.service containerd.service
 
 echo "Setting up Zsh..."
 chsh -s /usr/bin/zsh
