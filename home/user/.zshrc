@@ -105,8 +105,6 @@ else
   export EDITOR='mvim'
 fi
 
-export GPG_TTY=$(tty)
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/usr/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -131,4 +129,6 @@ eval "$(zoxide init zsh)"
 # Created by `pipx` on 2024-05-15 12:28:17
 export PATH="$PATH:/home/user/.local/bin"
 
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"  # Systemd ssh-agent.service, shared by every shell
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"  # Socket-activated ssh-agent.socket from openssh; keys are added for 1 minute (see ~/.ssh/config)
+export SSH_ASKPASS="$HOME/.local/bin/ssh-askpass.sh"  # Passphrase prompt in a GUI window, even when ssh has no terminal
+export SSH_ASKPASS_REQUIRE=prefer
