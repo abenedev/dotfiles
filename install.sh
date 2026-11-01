@@ -70,8 +70,8 @@ minimal_packages=(
     fzf  # Zoxide auto-completion dependency
     gcc
     github-cli
-    gnome-keyring
-    libsecret  # secret-tool
+    gnome-keyring  # Secret service (gh token, Brave)
+    libsecret
     make
     megacmd
     neofetch
@@ -99,20 +99,22 @@ cp home/user/.zshrc ~/
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-echo "Setting up GPG..."
-mkdir -p ~/.gnupg ~/.local/bin
-chmod 700 ~/.gnupg
+echo "Setting up GPG & SSH..."
+mkdir -p ~/.gnupg ~/.ssh
+chmod 700 ~/.gnupg ~/.ssh
 cp home/user/.gnupg/gpg-agent.conf ~/.gnupg
-cp home/user/.local/bin/gpg-unlock.sh home/user/.local/bin/ssh-unlock.sh ~/.local/bin
+cp home/user/.ssh/config ~/.ssh
 gpgconf --kill gpg-agent
-echo "Unlocking gnome-keyring on TTY login..."
+systemctl --user enable --now ssh-agent.socket
+echo "Unlocking gnome-keyring on TTY login (the keyring must use your login password)..."
 grep -q pam_gnome_keyring /etc/pam.d/login || sudo sed -i \
     -e '/^auth .*system-local-login/a auth       optional     pam_gnome_keyring.so' \
     -e '/^session .*system-local-login/a session    optional     pam_gnome_keyring.so auto_start' \
     /etc/pam.d/login
-echo "Store the passphrases (the keyring must use your login password) with:"
-echo "    secret-tool store --label='GPG passphrase' service gpg-passphrase"
-echo "    secret-tool store --label='SSH passphrase' service ssh-passphrase"
+
+echo "Setting up Claude Code skills..."
+mkdir -p ~/.claude/skills
+cp -r home/user/.claude/skills/commit ~/.claude/skills
 
 echo "Setting up Vim..."
 cp home/user/.vimrc ~
@@ -188,10 +190,6 @@ if [ "$INSTALL_DESKTOP_ENV" = true ]; then
     echo "Setting up Wofi..."
     cp -r home/user/.config/wofi ~/.config
 fi
-
-echo "Setting up SSH agent..."
-systemctl enable --user ssh-agent.service
-systemctl start --user ssh-agent.service
 
 if [ "$INSTALL_APPS" = true ]; then
     echo "Installing desktop applications packages..."
