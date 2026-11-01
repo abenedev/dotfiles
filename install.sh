@@ -114,7 +114,7 @@ grep -q pam_gnome_keyring /etc/pam.d/login || sudo sed -i \
 
 echo "Setting up Claude Code skills..."
 mkdir -p ~/.claude/skills
-cp -r home/user/.claude/skills/commit ~/.claude/skills
+cp -r home/user/.claude/skills/commit-and-push ~/.claude/skills
 
 echo "Setting up Vim..."
 cp home/user/.vimrc ~
