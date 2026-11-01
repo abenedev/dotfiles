@@ -1,11 +1,11 @@
 ---
-name: commit
-description: Commit the current git changes on the user's behalf as a series of small, GPG-signed Conventional Commits (commitizen style) authored by the user alone, one file per commit unless files are truly inseparable, matching the repo's existing commit history. Use ONLY when the user explicitly asks to commit (e.g. "/commit", "commit this", "commit the changes", "make the commits") — never commit proactively after finishing a task, and do not use it for questions about git or for writing a single message the user will commit themselves.
+name: commit-and-push
+description: Commit the current git changes on the user's behalf as a series of small, GPG-signed Conventional Commits (commitizen style) authored by the user alone, one file per commit unless files are truly inseparable, matching the repo's existing commit history, then push them once every unpushed commit is verified (signed, authored only by the user, commitizen-named). Use ONLY when the user explicitly asks to commit (e.g. "/commit-and-push", "commit this", "commit the changes", "make the commits") — never commit or push proactively after finishing a task, and do not use it for questions about git or for writing a single message the user will commit themselves.
 ---
 
-# Commit
+# Commit and push
 
-Turn the working tree into a clean, reviewable history: many small commits, each touching one file (or a few files that cannot be split), each with a Conventional Commits message that matches how this repository already writes them.
+Turn the working tree into a clean, reviewable history, and publish it: many small commits, each touching one file (or a few files that cannot be split), each with a Conventional Commits message that matches how this repository already writes them.
 
 You commit **on the user's behalf**: every commit is authored by the user alone and signed with their GPG key, exactly as if they had typed `git commit` themselves. Claude never appears as an author or co-author.
 
@@ -109,11 +109,31 @@ If a commit isn't properly signed, or `git commit -S` fails, stop. Don't retry w
 Use `git add -A -- <old> <new>` for renames and deletions so both sides are staged. Before each commit, check that `git diff --cached --name-only` lists only the intended files. If something else was already staged, unstage it with `git restore --staged -- <file>`.
 
 Guardrails:
-- Never push, amend, rebase or rewrite existing commits unless the user asks.
+- Push only as described in section 5, never with `--force`/`--force-with-lease`, never to another remote or branch than the configured upstream, and never when the checks of section 5 fail.
+- Never amend, rebase or rewrite existing commits unless the user asks.
 - Never commit unsigned (`--no-gpg-sign`, `-c commit.gpgsign=false`) and never commit under another identity.
 - Never skip hooks (`--no-verify`). If a pre-commit hook fails or reformats files, fix the problem, re-stage, and make the commit again as a new commit.
 - If you're on the default branch and the user's instructions say to branch first, do that before committing.
 
-## 5. Report
+## 5. Push
 
-Finish with `git log -n <number of new commits> --format='%h %G? %an | %s'` (so the user can see every commit is theirs and signed) and a short summary: how many commits, any files deliberately left uncommitted and why, and anything the user should decide (an unrelated file you skipped, a hook that changed files).
+Once every planned commit is made, push them. The push is part of this skill, so no further confirmation is needed, but only when **every commit about to be pushed** passes these checks. Check the whole unpushed range, not just the commits you made, because older local commits go out with the push:
+
+```bash
+git rev-parse --abbrev-ref --symbolic-full-name '@{u}'   # the upstream; must exist
+git log '@{u}..HEAD' --format='%h|%G?|%ae|%ce|%s'
+```
+
+For each line:
+- `%G?` is `G` or `U` (signed, verified by gpg), and `%ae` and `%ce` both equal `git config --get user.email` (only the user as author and committer; no co-author trailers: `git log '@{u}..HEAD' --format=%B | grep -i '^co-authored-by'` must print nothing).
+- The subject follows the commitizen naming convention: `<type>(<scope>)?!?: <subject>` with a type from the list in section 3 (`^(feat|fix|refactor|perf|test|docs|style|build|ci|chore|revert)(\([^)]+\))?!?: .+`), unless the repo's history or a commitizen config clearly uses something else.
+
+If a commit fails a check, **do not push**: say which commit and why, and let the user decide (this skill never rewrites history on its own).
+
+If the branch has no upstream, push with `git push -u origin <branch>` only when `origin` is the sole remote; otherwise ask which remote to use.
+
+Then push with a plain `git push` (no force flags, no `--no-verify`, don't bypass hooks). The push goes over SSH, so the SSH key's passphrase may be asked in a small window (`~/.local/bin/ssh-askpass.sh`): run it with a long Bash `timeout` (e.g. 300000 ms) and tell the user to expect it. If the push is rejected (non-fast-forward, protected branch, permission), stop and report the error; don't pull, rebase or force without being asked. If the user cancels the passphrase window, report it and stop.
+
+## 6. Report
+
+Finish with `git log -n <number of new commits> --format='%h %G? %an | %s'` (so the user can see every commit is theirs and signed) and a short summary: how many commits, what was pushed (`git status -sb` or the push output) or why nothing was pushed, any files deliberately left uncommitted and why, and anything the user should decide (an unrelated file you skipped, a hook that changed files).
