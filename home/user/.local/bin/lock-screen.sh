@@ -1,7 +1,6 @@
 #!/bin/bash
-# Lock the screen. The GPG passphrase cache and the SSH agent keys are flushed while locked and restored once hyprlock is unlocked.
+# Lock the screen, unless it is already locked. The login keyring is locked too, so secrets are asked again after unlocking.
 pidof hyprlock > /dev/null && exit 0
 
-~/.local/bin/gpg-unlock.sh --lock
-~/.local/bin/ssh-unlock.sh --lock
-hyprlock && ~/.local/bin/gpg-unlock.sh --keyring && ~/.local/bin/ssh-unlock.sh --keyring
+busctl --user call org.freedesktop.secrets /org/freedesktop/secrets org.freedesktop.Secret.Service Lock ao 1 /org/freedesktop/secrets/collection/login > /dev/null || true
+hyprlock
