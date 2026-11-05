@@ -16,8 +16,8 @@ hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind("F11", hl.dsp.window.fullscreen({ mode = "fullscreen" })) -- Toggle the window between focus and fullscreen
 
--- Change wallpaper
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.local/bin/wallpapercycle.sh"))
+-- Switch between the dark and light themes
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.local/bin/theme.sh"))
 
 -- Move focus
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
