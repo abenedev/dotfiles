@@ -65,7 +65,6 @@ minimal_packages=(
     bluez
     bluez-utils
     btop
-    cronie
     eza  # Blazing fast `ls`
     fzf  # Zoxide auto-completion dependency
     gcc
@@ -179,11 +178,6 @@ if [ "$INSTALL_DESKTOP_ENV" = true ]; then
 
     echo "Setting up Dunst..."
     cp -r home/user/.config/dunst ~/.config
-
-    echo "Setting up cron jobs..."
-    cp -r home/user/.local/crontab ~/.local
-    sudo systemctl enable --now cronie.service
-    crontab ~/.local/crontab/low-battery-notification
 
     echo "Setting up Gnome theme..."
     sudo cp gnome-shell-theme.gresource /usr/share/gnome-shell

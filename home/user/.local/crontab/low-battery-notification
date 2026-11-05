@@ -1,1 +1,0 @@
-* * * * * XDG_RUNTIME_DIR=/run/user/$(id -u) /bin/bash ~/.local/bin/low-battery-notification.sh
