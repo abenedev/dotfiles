@@ -12,19 +12,24 @@ ac_online() {
     return 1
 }
 
+running() { pgrep -x mega-cmd-server >/dev/null; }
+
 last=""
 apply() {
     if ac_online; then state=ac; else state=battery; fi
     [ "$state" = "$last" ] && return
     last=$state
     if [ "$state" = ac ]; then
-        pgrep -x mega-cmd-server >/dev/null || nohup mega-cmd-server >/dev/null 2>&1 &
-    else
-        mega-quit >/dev/null 2>&1
+        # fd 9 (the lock) is closed in children so a leftover process can't block a restart
+        if ! running; then
+            nohup mega-cmd-server >/dev/null 2>&1 9>&- &
+        fi
+    elif running; then  # mega-quit would start the server if it isn't running
+        mega-quit >/dev/null 2>&1 9>&-
     fi
 }
 
 apply
-udevadm monitor --udev --subsystem-match=power_supply | while read -r _; do
+udevadm monitor --udev --subsystem-match=power_supply 9>&- | while read -r _; do
     apply
 done
