@@ -3,7 +3,7 @@
 # ssh and ssh-add call it with the prompt as argument and read the passphrase from stdout.
 set -euo pipefail
 
-desc="${1:-Enter passphrase}"
+desc="SSH authentication:"$'\n'"${1:-Enter passphrase}"
 desc="${desc//%/%25}"  # Assuan percent-escapes
 desc="${desc//$'\n'/%0A}"
 
@@ -13,6 +13,7 @@ while IFS= read -r line; do
     case "$line" in
         "D "*)
             pin="${line#D }"
+            pin="${pin//\\/\\\\}"  # Keep backslashes literal, %b would interpret them
             printf '%b\n' "${pin//%/\\x}"  # Decode the percent-escapes
             exit 0
             ;;
