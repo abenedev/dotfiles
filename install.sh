@@ -110,9 +110,10 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/p
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 echo "Setting up GPG & SSH..."
-mkdir -p ~/.gnupg ~/.ssh
+mkdir -p ~/.gnupg ~/.ssh ~/.local/bin
 chmod 700 ~/.gnupg ~/.ssh
 cp home/user/.gnupg/gpg-agent.conf ~/.gnupg
+cp home/user/.local/bin/pinentry-wayland.sh ~/.local/bin
 cp home/user/.ssh/config ~/.ssh
 gpgconf --kill gpg-agent
 systemctl --user enable --now ssh-agent.socket
@@ -175,6 +176,8 @@ if [ "$INSTALL_DESKTOP_ENV" = true ]; then
     echo "Setting up Hyprland..."
     cp -r home/user/.config/hypr ~/.config
     cp -r home/user/.local/bin ~/.local
+    mkdir -p ~/.local/share/themes
+    cp -r home/user/.local/share/themes/Adwaita-dark ~/.local/share/themes
 
     echo "Setting up Dunst..."
     cp -r home/user/.config/dunst ~/.config
