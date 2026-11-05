@@ -132,3 +132,6 @@ export PATH="$PATH:$HOME/.local/bin"
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"  # Socket-activated ssh-agent.socket from openssh; keys are added for 1 minute (see ~/.ssh/config)
 export SSH_ASKPASS="$HOME/.local/bin/ssh-askpass.sh"  # Passphrase prompt in a GUI window, even when ssh has no terminal
 export SSH_ASKPASS_REQUIRE=prefer
+
+export PAGER=less  # Vim keys for git diff, man... (j/k, d/u, g/G, /search)
+export LESS=-FR  # Print output fitting on one screen directly, keep colors

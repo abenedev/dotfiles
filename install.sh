@@ -70,6 +70,7 @@ minimal_packages=(
     gcc
     github-cli
     gnome-keyring  # Secret service (gh token, Brave)
+    less  # Pager with Vim keys
     libsecret
     make
     megacmd
