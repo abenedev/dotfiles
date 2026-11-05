@@ -99,9 +99,9 @@ hl.window_rule({
     no_focus = true,
 })
 
--- Float the SSH passphrase prompt, GPG's one already floats as it runs through XWayland
+-- Float the GPG & SSH passphrase prompts
 hl.window_rule({
-    name  = "float-ssh-pinentry",
+    name  = "float-pinentry",
     match = { class = "^pinentry-gtk$" },
 
     float = true,
