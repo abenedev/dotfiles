@@ -1,0 +1,2 @@
+/* GTK3 only ships this dark stylesheet as a variant, this gives it the Adwaita-dark name that gsettings can select */
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
