@@ -35,6 +35,27 @@ for arg in "$@"; do
     shift
 done
 
+# Replace the Neovim config, keeping the previous one as a timestamped backup
+install_nvim_config() {
+    echo "Setting up Neovim..."
+    mkdir -p ~/.config
+    if [ -d ~/.config/nvim ]; then
+        mv ~/.config/nvim ~/.config/nvim.bak."$(date +%s)"
+    fi
+    cp -r home/user/.config/nvim ~/.config
+}
+
+# WSL (Ubuntu): the Arch packages, services & desktop below don't apply.
+# Neovim itself isn't installed here: the apt version is too old for LazyVim.
+if command -v apt-get > /dev/null; then
+    echo "Installing Neovim dependencies..."
+    sudo apt-get update
+    sudo apt-get install -y ripgrep
+    install_nvim_config
+    echo "Done."
+    exit 0
+fi
+
 echo "Installing Yay..."
 sudo pacman -Syu --needed --noconfirm git base-devel
 git clone https://aur.archlinux.org/yay-bin.git
@@ -53,12 +74,10 @@ sudo cp etc/xdg/reflector/reflector.conf /etc/xdg/reflector
 sudo systemctl start reflector.service
 sudo systemctl enable --now reflector.timer
 
-echo "Backing up existing Neovim config if any..."
-if [ -d "~/.config/nvim" ]; then
-  mv "~/.config/nvim" "~/.config/nvim.bak"
-fi
+echo "Clearing Neovim plugins & state..."
 rm -rf ~/.local/state/nvim
 rm -rf ~/.local/share/nvim
+install_nvim_config
 
 echo "Installing minimal packages..."
 minimal_packages=(
@@ -159,6 +178,7 @@ if [ "$INSTALL_DESKTOP_ENV" = true ]; then
         uwsm  # Universal Wayland Session Manager
         vlc
         waybar
+        wl-clipboard  # Clipboard for Neovim
         wofi  # Application launcher
     )
     yay -Syu --needed --noconfirm "${desktop_environment_packages[@]}"
