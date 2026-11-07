@@ -134,3 +134,5 @@ export SSH_ASKPASS_REQUIRE=prefer
 
 export PAGER=less  # Vim keys for git diff, man... (j/k, d/u, g/G, /search)
 export LESS=-FR  # Print output fitting on one screen directly, keep colors
+
+export OP_BIOMETRIC_UNLOCK_ENABLED=false  # Makes 1password CLI works without the desktop app
