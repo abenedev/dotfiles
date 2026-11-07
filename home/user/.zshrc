@@ -5,14 +5,13 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # List of plugins used
 plugins=(
+    1password
     archlinux
     docker
     docker-compose
-    gh # GitHub CLI
+    gh
     git
     git-auto-fetch
-    git-flow  # Adds aliases like `gcd` for `git checkout develop`
-    poetry
     rust
     sudo
     zsh-autosuggestions
