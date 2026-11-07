@@ -1,0 +1,47 @@
+{
+  "model": "sonnet",
+  "statusLine": {
+    "type": "command",
+    "command": "bash /home/user/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "frontend-design@anthropic-plugin-directory": true,
+    "code-simplifier@anthropic-plugin-directory": true,
+    "playwright@anthropic-plugin-directory": true,
+    "github@anthropic-plugin-directory": true,
+    "security-guidance@anthropic-plugin-directory": true,
+    "stripe@anthropic-plugin-directory": true
+  },
+  "modelSettings": {
+    "claude-sonnet-4-6": {
+      "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "medium"
+    },
+    "claude-sonnet-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/user/.claude/hooks/notify.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "promptSuggestionEnabled": false,
+  "theme": "dark",
+  "editorMode": "vim",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
+}
