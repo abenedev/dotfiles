@@ -50,7 +50,10 @@ install_nvim_config() {
 if command -v apt-get > /dev/null; then
     echo "Installing Neovim dependencies..."
     sudo apt-get update
-    sudo apt-get install -y ripgrep
+    sudo apt-get install -y ripgrep fd-find
+    # Ubuntu names the binary fdfind; nvim pickers look for fd
+    mkdir -p ~/.local/bin
+    ln -sf "$(command -v fdfind)" ~/.local/bin/fd
     install_nvim_config
     echo "Done."
     exit 0
@@ -85,6 +88,7 @@ minimal_packages=(
     bluez-utils
     btop
     eza  # Blazing fast `ls`
+    fd  # Fast `find`, used by nvim pickers
     fzf  # Zoxide auto-completion dependency
     gcc
     github-cli
@@ -143,9 +147,11 @@ grep -q pam_gnome_keyring /etc/pam.d/login || sudo sed -i \
     -e '/^session .*system-local-login/a session    optional     pam_gnome_keyring.so auto_start' \
     /etc/pam.d/login
 
-echo "Setting up Claude Code skills..."
-mkdir -p ~/.claude/skills
+echo "Setting up Claude Code settings, hooks & skills..."
+mkdir -p ~/.claude/skills ~/.claude/hooks
 cp -r home/user/.claude/skills/commit-and-push ~/.claude/skills
+cp home/user/.claude/settings.json home/user/.claude/statusline-command.sh ~/.claude
+cp home/user/.claude/hooks/notify.sh ~/.claude/hooks
 
 echo "Setting up Vim..."
 cp home/user/.vimrc ~
@@ -162,6 +168,7 @@ if [ "$INSTALL_DESKTOP_ENV" = true ]; then
         alacritty
         brightnessctl
         dunst  # Notifications manager
+        libnotify  # notify-send, used by the Claude Code notification hook
         evince  # PDF viewer
         hypridle  # Idle management daemon
         hyprland
