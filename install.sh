@@ -224,7 +224,7 @@ if [ "$INSTALL_APPS" = true ]; then
     echo "Installing desktop applications packages..."
     apps_packages=(
         blueman
-        brave-bin
+        ecosia-browser-bin
         discord-canary
         gimp
         signal-desktop
