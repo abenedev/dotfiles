@@ -35,13 +35,22 @@ return {
           explorer = {
             hidden = true, -- Show dotfiles in the explorer
             ignored = true, -- Show gitignored files in the explorer
+            exclude = { ".git", "node_modules", ".venv", "target", "__pycache__" },
           },
           files = {
             hidden = true, -- Show dotfiles in the file picker
             ignored = true, -- Show gitignored files in the file picker
+            exclude = { ".git", "node_modules", ".venv", "target", "__pycache__" },
           },
         },
       },
+    },
+  },
+  {
+    -- Reading the system clipboard on WSL spawns powershell.exe, which freezes nvim
+    "gbprod/yanky.nvim",
+    opts = {
+      system_clipboard = { sync_with_ring = false },
     },
   },
   {
@@ -49,7 +58,8 @@ return {
     lazy = false,
     opts = {
       enabled = true,
-      debounce_delay = 1000, -- Delay in milliseconds
+      debounce_delay = 2000, -- Delay in milliseconds
+      trigger_events = { immediate_save = { "BufLeave", "FocusLost" }, defer_save = { "InsertLeave" } },
     },
     keys = {
       { "<leader>uv", "<cmd>ASToggle<CR>", desc = "Toggle autosave" },
