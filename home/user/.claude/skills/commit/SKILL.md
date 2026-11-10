@@ -1,11 +1,11 @@
 ---
-name: commit-and-push
-description: Commit the current git changes on the user's behalf as GPG-signed Conventional Commits authored by the user alone, grouping related files into the same commit, then push. Use ONLY when the user explicitly asks to commit (e.g. "/commit-and-push", "commit this", "commit the changes", "make the commits") — never commit or push proactively after finishing a task, and do not use it for questions about git or for writing a single message the user will commit themselves.
+name: commit
+description: Commit the current git changes on the user's behalf as GPG-signed Conventional Commits authored by the user alone, grouping related files into the same commit, then push. Use ONLY when the user explicitly asks to commit (e.g. "/commit", "commit this", "commit the changes", "make the commits") — never commit proactively after finishing a task, and do not use it for questions about git or for writing a single message the user will commit themselves.
 ---
 
-# Commit and push
+# Commit
 
-Read the diff, group related changes into commits, push. Keep it fast and cheap in tokens.
+Read the diff, group related changes into commits. Keep it fast and cheap in tokens.
 
 Don't run tests, lint, type checks or builds, and don't replay or simulate the commits. A commit may leave a feature broken: that's fine.
 
@@ -43,14 +43,6 @@ git commit -S -m "fix(scope): subject"
 
 Commit as the user only, with `-S`: no `--author`, no `--no-gpg-sign`, no `--no-verify`. If signing fails or the window is cancelled, stop and tell the user. Don't retry unsigned.
 
-## 3. Push
+## 3. Report
 
-```bash
-SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket" SSH_ASKPASS="$HOME/.local/bin/ssh-askpass.sh" SSH_ASKPASS_REQUIRE=prefer git push
-```
-
-Use a long `timeout` (300000 ms): an SSH passphrase window may appear. With no upstream, use `git push -u origin <branch>`. Never force push. If the push is rejected, stop and report the error.
-
-## 4. Report
-
-Say how many commits were made, whether the push worked, and which files were left out, if any.
+Say how many commits were made and which files were left out, if any.
