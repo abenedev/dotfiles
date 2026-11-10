@@ -5,7 +5,7 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 -- Launchers
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(apps.appLauncher))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(apps.webBrowser))
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("discord-canary"))
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("discord"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(apps.fileExplorer))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(apps.terminal))
 hl.bind("Control_L + Shift_L + escape", hl.dsp.exec_cmd(apps.taskManager), { release = true })

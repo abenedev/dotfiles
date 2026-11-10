@@ -232,7 +232,7 @@ if [ "$INSTALL_APPS" = true ]; then
     apps_packages=(
         blueman
         ecosia-browser-bin
-        discord-canary
+        discord
         gimp
         signal-desktop
     )
