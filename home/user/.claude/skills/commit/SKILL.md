@@ -1,6 +1,8 @@
 ---
 name: commit
-description: Commit the current git changes on the user's behalf as GPG-signed Conventional Commits authored by the user alone, grouping related files into the same commit, then push. Use ONLY when the user explicitly asks to commit (e.g. "/commit", "commit this", "commit the changes", "make the commits") — never commit proactively after finishing a task, and do not use it for questions about git or for writing a single message the user will commit themselves.
+description: Commit the current git changes on the user's behalf as GPG-signed Conventional Commits authored by the user alone, grouping related files into the same commit. Use ONLY when the user explicitly asks to commit (e.g. "/commit", "commit this", "commit the changes", "make the commits") — never commit proactively after finishing a task, and do not use it for questions about git or for writing a single message the user will commit themselves.
+model: claude-haiku-5-5
+effort: low
 ---
 
 # Commit
