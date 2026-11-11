@@ -1,8 +1,26 @@
 {
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.*.local)",
+      "Read(**/.env.development)",
+      "Read(**/.env.production)",
+      "Read(**/.env.test)",
+      "Read(**/.env.staging)",
+      "Edit(**/.env)",
+      "Edit(**/.env.local)",
+      "Edit(**/.env.*.local)",
+      "Edit(**/.env.development)",
+      "Edit(**/.env.production)",
+      "Edit(**/.env.test)",
+      "Edit(**/.env.staging)"
+    ]
+  },
   "model": "sonnet",
   "statusLine": {
     "type": "command",
-    "command": "bash /home/user/.claude/statusline-command.sh"
+    "command": "python3 /home/user/.claude/hooks/usage_guard.py statusline"
   },
   "enabledPlugins": {
     "frontend-design@anthropic-plugin-directory": true,
@@ -17,13 +35,13 @@
       "effortLevel": "high"
     },
     "claude-opus-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "high"
     },
     "claude-sonnet-5": {
       "effortLevel": "medium"
     },
     "claude-sonnet-5-5": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
     }
   },
   "hooks": {
@@ -33,6 +51,18 @@
           {
             "type": "command",
             "command": "bash /home/user/.claude/hooks/notify.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Edit|Write|NotebookEdit|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /home/user/.claude/hooks/block_env.py",
             "timeout": 10
           }
         ]
