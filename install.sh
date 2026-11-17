@@ -121,8 +121,9 @@ sudo cp etc/tlp.d/01-battery.conf /etc/tlp.d
 sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
 sudo systemctl enable --now tlp.service
 sudo tlp start
-# Start these on demand instead of at boot (docker.socket still starts docker when needed)
-sudo systemctl disable docker.service containerd.service
+
+echo "Setting up Docker..."
+sudo systemctl enable --now docker.service containerd.service
 
 echo "Setting up Zsh..."
 chsh -s /usr/bin/zsh
