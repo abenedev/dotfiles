@@ -59,6 +59,6 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("~/.local/bin/volumecontrol.sh -
 -- Lock
 -- Lid switch: "on" = closed, "off" = opened. On AC, ac-no-sleep.sh stops logind from suspending on close,
 -- so lock and turn the internal screen off instead (processes keep running).
-hl.bind("switch:on:Lid Switch",  hl.dsp.exec_cmd("hyprctl dispatch dpms off eDP-1; ~/.local/bin/lock-screen.sh"), { locked = true })
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd("hyprctl dispatch dpms on eDP-1"), { locked = true })
+hl.bind("switch:on:Lid Switch",  hl.dsp.exec_cmd("sh -c '~/.local/bin/lock-screen.sh & until pidof hyprlock > /dev/null; do sleep 0.1; done; sleep 0.5; hyprctl dispatch \"hl.dsp.dpms({ action = \\\"off\\\", monitor = \\\"eDP-1\\\" })\"'"), { locked = true })
+hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.dpms({ action = \"on\", monitor = \"eDP-1\" })'"), { locked = true })
 hl.bind(mainMod .. " + F12", hl.dsp.exec_cmd("~/.local/bin/lock-screen.sh"))
